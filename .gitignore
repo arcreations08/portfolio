@@ -1,0 +1,4 @@
+# Ignore raw multi-gigabyte source video archives to prevent GitHub 100MB reject
+Achivments and creations/
+*.mov
+*.part.mp4
