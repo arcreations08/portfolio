@@ -85,6 +85,13 @@
       color: #fff;
     }
 
+    /* Custom Dragging Cursor — Hiding Default Mouse on Pointer Devices */
+    @media (pointer: fine) {
+      body, a, button, input, select, textarea, [onclick] {
+        cursor: none !important;
+      }
+    }
+
     /* Ambient Sakura Falling Canvas */
     #sakura-canvas {
       position: fixed;
@@ -94,6 +101,54 @@
       height: 100%;
       pointer-events: none;
       z-index: 15;
+    }
+
+    /* Custom Cursor: Dragging Ring & Center Dot */
+    .custom-cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lantern-gold);
+      box-shadow: 0 0 10px var(--lantern-gold), 0 0 20px var(--sakura-pink);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      opacity: 0;
+    }
+
+    .custom-cursor-ring {
+      position: fixed;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 190, 59, 0.65);
+      background: rgba(255, 117, 151, 0.06);
+      box-shadow: 0 0 15px rgba(255, 190, 59, 0.25);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, background 0.25s ease, opacity 0.2s ease;
+      opacity: 0;
+    }
+
+    .custom-cursor-ring.active-hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--sakura-pink);
+      background: rgba(255, 117, 151, 0.16);
+      box-shadow: 0 0 25px var(--sakura-glow);
+    }
+
+    .custom-cursor-dot.active-hover {
+      background: #ffffff;
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .custom-cursor-ring.active-click {
+      transform: translate(-50%, -50%) scale(0.85);
+      border-color: #ffffff;
     }
 
     /* Glowing interactive cursor follower */
@@ -1823,6 +1878,8 @@
 </head>
 <body>
   <canvas id="sakura-canvas"></canvas>
+  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+  <div class="custom-cursor-ring" id="custom-cursor-ring"></div>
   <div class="lantern-cursor" id="lantern-cursor"></div>
 
   <!-- Navigation: Corner Logo + ONLY Home, Portfolio, Contact -->
@@ -1888,9 +1945,9 @@
     <div class="series-nav-bar">
       <div class="container">
         <div class="series-nav-inner">
-          <a href="#ugc" class="series-nav-link">1. UGC & Commercials (5)</a>
-          <a href="#naruto" class="series-nav-link">2. Naruto Anime Series (8)</a>
-          <a href="#films" class="series-nav-link">3. AI Films & Cinema (3)</a>
+          <a href="#films" class="series-nav-link">1. AI Films & Cinema (4)</a>
+          <a href="#ugc" class="series-nav-link">2. UGC & Commercials (7)</a>
+          <a href="#naruto" class="series-nav-link">3. Naruto Anime Series (8)</a>
           <a href="#cats" class="series-nav-link">4. Cats Fantasy Series (6)</a>
           <a href="#cars" class="series-nav-link">5. Automotive & Cars (2)</a>
         </div>
@@ -1898,20 +1955,189 @@
     </div>
 
     <div class="container">
-      <!-- SECTION 1: UGC & COMMERCIALS -->
-      <section class="portfolio-series-section" id="ugc">
+      <!-- SECTION 1: AI FILMS (NOW FIRST) -->
+      <section class="portfolio-series-section" id="films">
         <div class="series-header reveal">
           <div>
             <div class="eyebrow" style="margin-bottom: 8px;">Series 01</div>
-            <h2 class="series-title">UGC & Commercial Ads</h2>
+            <h2 class="series-title">AI Films & Documentaries</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">
-              High-converting user-generated content, model ad promos, and viral retention hooks designed for TikTok and Instagram ad campaigns.
+              Long-form generative storytelling, YouTube automation essays, investigative cinematic world-building, and high-fidelity video production.
             </p>
           </div>
-          <span class="series-count-pill">5 Videos</span>
+          <span class="series-count-pill">4 Videos</span>
         </div>
 
         <div class="video-grid">
+          <article class="video-card reveal">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/the-last-pumpkin.mp4', 'The Last Pumpkin', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_the_last_pumpkin.jpg')">
+              <img src="thumbnails/thumb_the_last_pumpkin.jpg" alt="The Last Pumpkin" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">The Last Pumpkin</h3>
+              <p class="video-desc">Atmospheric AI fantasy short featuring rich character narrative, ambient soundscapes, and cinematic world-building.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/the-last-pumpkin.mp4', 'The Last Pumpkin', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_the_last_pumpkin.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/films/the-last-pumpkin.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="video-card reveal">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
+              <img src="thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg" alt="The Ledger" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">The Ledger</h3>
+              <p class="video-desc">Deep narrative investigative documentary created using AI scripting, stylized visuals, and dramatic audio production.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/films/the-ledger.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="video-card reveal">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
+              <img src="thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg" alt="Generated from scratch" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">Generated from scratch</h3>
+              <p class="video-desc">Cinematic generative storytelling utilizing prompt orchestration, character consistency, and atmospheric lighting.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/films/generated-from-scratch.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="video-card reveal">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/inscets-fun.mp4', 'Inscets Fun', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg')">
+              <img src="thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg" alt="Inscets Fun" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">Inscets Fun</h3>
+              <p class="video-desc">Cinematic AI film storytelling utilizing narrative scripting, realistic voiceover, and atmospheric visual curation.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/inscets-fun.mp4', 'Inscets Fun', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/films/inscets-fun.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION 2: UGC & COMMERCIALS -->
+      <section class="portfolio-series-section" id="ugc">
+        <div class="series-header reveal">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 8px;">Series 02</div>
+            <h2 class="series-title">UGC & Commercial Ads</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">
+              High-converting user-generated content, model ad promos, beauty reels, and viral retention hooks designed for TikTok and Instagram ad campaigns.
+            </p>
+          </div>
+          <span class="series-count-pill">7 Videos</span>
+        </div>
+
+        <div class="video-grid">
+          <article class="video-card reveal">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
+              <img src="thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg" alt="Stop scrolling" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">UGC & Commercials</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Stop scrolling</h3>
+              <p class="video-desc">High-converting UGC asset crafted for viral TikTok, Instagram Reels, and digital ad campaigns.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/ugc/stop-scrolling.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/lipstick.mp4', 'Lipstick Commercial', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_lipstick.jpg')">
+              <img src="thumbnails/thumb_lipstick.jpg" alt="Lipstick Commercial" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">UGC & Commercials</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Lipstick Commercial</h3>
+              <p class="video-desc">Dynamic beauty UGC reel with persuasive pacing, clean macro aesthetics, and brand engagement prompts.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/lipstick.mp4', 'Lipstick Commercial', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_lipstick.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/ugc/lipstick.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/peagon-fun.mp4', 'Peagon Fun', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_peagon_fun.jpg')">
+              <img src="thumbnails/thumb_peagon_fun.jpg" alt="Peagon Fun" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">UGC & Commercials</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Peagon Fun</h3>
+              <p class="video-desc">Humorous viral social hook featuring rapid-fire visual edits and high-energy pacing for social media algorithms.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/peagon-fun.mp4', 'Peagon Fun', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_peagon_fun.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/ugc/peagon-fun.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
 
           <article class="video-card reveal">
             <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/ad.mp4', 'AD', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_UGC_AD__mp4.jpg')">
@@ -1953,28 +2179,6 @@
                   <span>Watch Video</span> <span>▶</span>
                 </button>
                 <a href="videos/ugc/model-ad-ugc.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
-              <img src="thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg" alt="Stop scrolling" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">UGC & Commercials</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">UGC & Commercials</span>
-              <h3 class="video-title">Stop scrolling</h3>
-              <p class="video-desc">High-converting UGC asset crafted for viral TikTok, Instagram Reels, and digital ad campaigns.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/ugc/stop-scrolling.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
@@ -2025,11 +2229,11 @@
         </div>
       </section>
 
-      <!-- SECTION 2: NARUTO ANIME SERIES -->
+      <!-- SECTION 3: NARUTO ANIME SERIES -->
       <section class="portfolio-series-section" id="naruto">
         <div class="series-header reveal">
           <div>
-            <div class="eyebrow" style="margin-bottom: 8px;">Series 02</div>
+            <div class="eyebrow" style="margin-bottom: 8px;">Series 03</div>
             <h2 class="series-title">Naruto Anime Action Series</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">
               Action-packed AI anime combat episodes, character consistency choreography, and dramatic short-form storytelling.
@@ -2218,89 +2422,6 @@
         </div>
       </section>
 
-      <!-- SECTION 3: AI FILMS -->
-      <section class="portfolio-series-section" id="films">
-        <div class="series-header reveal">
-          <div>
-            <div class="eyebrow" style="margin-bottom: 8px;">Series 03</div>
-            <h2 class="series-title">AI Films & Documentaries</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 4px;">
-              Long-form YouTube automation essays, investigative storytelling, and experimental generative cinema created from scratch.
-            </p>
-          </div>
-          <span class="series-count-pill">3 Videos</span>
-        </div>
-
-        <div class="video-grid">
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
-              <img src="thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg" alt="Generated from scratch" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">AI Films & Cinema</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">AI Films & Cinema</span>
-              <h3 class="video-title">Generated from scratch</h3>
-              <p class="video-desc">Cinematic AI film storytelling utilizing narrative scripting, realistic voiceover, and atmospheric visual curation.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/films/generated-from-scratch.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('videos/films/inscets-fun.mp4', 'Inscets Fun', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg')">
-              <img src="thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg" alt="Inscets Fun" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">AI Films & Cinema</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">AI Films & Cinema</span>
-              <h3 class="video-title">Inscets Fun</h3>
-              <p class="video-desc">Cinematic AI film storytelling utilizing narrative scripting, realistic voiceover, and atmospheric visual curation.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/films/inscets-fun.mp4', 'Inscets Fun', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Inscets_Fun_mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/films/inscets-fun.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
-              <img src="thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg" alt="The Ledger" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">AI Films & Cinema</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">AI Films & Cinema</span>
-              <h3 class="video-title">The Ledger</h3>
-              <p class="video-desc">Cinematic AI film storytelling utilizing narrative scripting, realistic voiceover, and atmospheric visual curation.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/films/the-ledger.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
       <!-- SECTION 4: CATS FANTASY SERIES -->
       <section class="portfolio-series-section" id="cats">
         <div class="series-header reveal">
@@ -2317,8 +2438,8 @@
         <div class="video-grid">
 
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov', 'Cat v piderman', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg')">
-              <img src="thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg" alt="Cat v piderman" class="video-thumb-img" loading="lazy">
+            <div class="video-thumb-container " onclick="openCinemaModal('videos/cats/cat-v-piderman.mp4', 'Cat v piderman', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_cat_v_piderman.jpg')">
+              <img src="thumbnails/thumb_cat_v_piderman.jpg" alt="Cat v piderman" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
@@ -2330,10 +2451,10 @@
               <h3 class="video-title">Cat v piderman</h3>
               <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov', 'Cat v piderman', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cats/cat-v-piderman.mp4', 'Cat v piderman', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_cat_v_piderman.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/cats/cat-v-piderman.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
@@ -2361,7 +2482,7 @@
           </article>
 
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20bus%20crashed.mov', 'cat bus crashed', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_bus_crashed_mov.jpg')">
+            <div class="video-thumb-container " onclick="openCinemaModal('videos/cats/cat-bus-crashed.mp4', 'cat bus crashed', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_bus_crashed_mov.jpg')">
               <img src="thumbnails/thumb_Cats_cat_bus_crashed_mov.jpg" alt="cat bus crashed" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
@@ -2374,16 +2495,16 @@
               <h3 class="video-title">cat bus crashed</h3>
               <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20bus%20crashed.mov', 'cat bus crashed', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_bus_crashed_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cats/cat-bus-crashed.mp4', 'cat bus crashed', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_bus_crashed_mov.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/cat%20bus%20crashed.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/cats/cat-bus-crashed.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
 
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20giant%20bug.mov', 'cat vs giant bug', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_giant_bug_mov.jpg')">
+            <div class="video-thumb-container " onclick="openCinemaModal('videos/cats/cat-vs-giant-bug.mp4', 'cat vs giant bug', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_giant_bug_mov.jpg')">
               <img src="thumbnails/thumb_Cats_cat_vs_giant_bug_mov.jpg" alt="cat vs giant bug" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
@@ -2396,16 +2517,16 @@
               <h3 class="video-title">cat vs giant bug</h3>
               <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20giant%20bug.mov', 'cat vs giant bug', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_giant_bug_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cats/cat-vs-giant-bug.mp4', 'cat vs giant bug', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_giant_bug_mov.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/cat%20vs%20giant%20bug.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/cats/cat-vs-giant-bug.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
 
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20snake.mov', 'cat vs snake', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_snake_mov.jpg')">
+            <div class="video-thumb-container " onclick="openCinemaModal('videos/cats/cat-vs-snake.mp4', 'cat vs snake', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_snake_mov.jpg')">
               <img src="thumbnails/thumb_Cats_cat_vs_snake_mov.jpg" alt="cat vs snake" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
@@ -2418,17 +2539,17 @@
               <h3 class="video-title">cat vs snake</h3>
               <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20snake.mov', 'cat vs snake', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_snake_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cats/cat-vs-snake.mp4', 'cat vs snake', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_snake_mov.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/cat%20vs%20snake.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/cats/cat-vs-snake.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
 
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20spider.mov', 'cat vs spider', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_spider_mov.jpg')">
-              <img src="thumbnails/thumb_Cats_cat_vs_spider_mov.jpg" alt="cat vs spider" class="video-thumb-img" loading="lazy">
+            <div class="video-thumb-container " onclick="openCinemaModal('videos/cats/cat-vs-spider.mp4', 'cat vs spider', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_cat_vs_spider.jpg')">
+              <img src="thumbnails/thumb_cat_vs_spider.jpg" alt="cat vs spider" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
@@ -2440,10 +2561,10 @@
               <h3 class="video-title">cat vs spider</h3>
               <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/cat%20vs%20spider.mov', 'cat vs spider', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_Cats_cat_vs_spider_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cats/cat-vs-spider.mp4', 'cat vs spider', 'Cats Fantasy Series | Cinematic · 16:9', 'thumbnails/thumb_cat_vs_spider.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/cat%20vs%20spider.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/cats/cat-vs-spider.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
@@ -2577,6 +2698,56 @@
   <button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top">↑</button>
 
   <script>
+    /* Custom Dragging Cursor Movement */
+    const cursorDot = document.getElementById('custom-cursor-dot');
+    const cursorRing = document.getElementById('custom-cursor-ring');
+    const lanternFollower = document.getElementById('lantern-cursor');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    let isFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+    if (isFinePointer && cursorDot && cursorRing) {
+      cursorDot.style.opacity = '1';
+      cursorRing.style.opacity = '1';
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+        if (lanternFollower) {
+          lanternFollower.style.left = mouseX + 'px';
+          lanternFollower.style.top = mouseY + 'px';
+        }
+      });
+
+      function animateCursor() {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top = ringY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      requestAnimationFrame(animateCursor);
+
+      const interactiveSelector = 'a, button, input, select, textarea, .video-thumb-container, [onclick]';
+      document.querySelectorAll(interactiveSelector).forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          cursorRing.classList.add('active-hover');
+          cursorDot.classList.add('active-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          cursorRing.classList.remove('active-hover');
+          cursorDot.classList.remove('active-hover');
+        });
+      });
+
+      window.addEventListener('mousedown', () => cursorRing.classList.add('active-click'));
+      window.addEventListener('mouseup', () => cursorRing.classList.remove('active-click'));
+    }
+
     /* Sakura canvas */
     const canvas = document.getElementById('sakura-canvas');
     const ctx = canvas.getContext('2d');
@@ -2590,17 +2761,10 @@
 
     const petalCount = 34;
     const petals = [];
-    let mouseX = width / 2;
-    let mouseY = height / 2;
 
     window.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      const cursor = document.getElementById('lantern-cursor');
-      if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      }
     });
 
     class SakuraPetal {

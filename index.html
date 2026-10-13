@@ -85,6 +85,13 @@
       color: #fff;
     }
 
+    /* Custom Dragging Cursor — Hiding Default Mouse on Pointer Devices */
+    @media (pointer: fine) {
+      body, a, button, input, select, textarea, [onclick] {
+        cursor: none !important;
+      }
+    }
+
     /* Ambient Sakura Falling Canvas */
     #sakura-canvas {
       position: fixed;
@@ -96,7 +103,55 @@
       z-index: 15;
     }
 
-    /* Glowing interactive cursor follower */
+    /* Custom Cursor: Dragging Ring & Center Dot */
+    .custom-cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--lantern-gold);
+      box-shadow: 0 0 10px var(--lantern-gold), 0 0 20px var(--sakura-pink);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      opacity: 0;
+    }
+
+    .custom-cursor-ring {
+      position: fixed;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 190, 59, 0.65);
+      background: rgba(255, 117, 151, 0.06);
+      box-shadow: 0 0 15px rgba(255, 190, 59, 0.25);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      transition: width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, background 0.25s ease, opacity 0.2s ease;
+      opacity: 0;
+    }
+
+    .custom-cursor-ring.active-hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--sakura-pink);
+      background: rgba(255, 117, 151, 0.16);
+      box-shadow: 0 0 25px var(--sakura-glow);
+    }
+
+    .custom-cursor-dot.active-hover {
+      background: #ffffff;
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .custom-cursor-ring.active-click {
+      transform: translate(-50%, -50%) scale(0.85);
+      border-color: #ffffff;
+    }
+
+    /* Glowing interactive ambient aura follower */
     .lantern-cursor {
       position: fixed;
       width: 320px;
@@ -1371,6 +1426,18 @@
       margin-bottom: 8px;
     }
 
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 680px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .form-control {
       width: 100%;
       background: rgba(255, 255, 255, 0.04);
@@ -1384,6 +1451,22 @@
       transition: all 0.3s ease;
     }
 
+    select.form-control {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffbe3b'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 20px;
+      cursor: pointer;
+    }
+
+    select.form-control option {
+      background: #0e061e;
+      color: #fff;
+      padding: 10px;
+    }
+
     .form-control:focus {
       border-color: var(--lantern-gold);
       background: rgba(255, 190, 59, 0.05);
@@ -1391,7 +1474,7 @@
     }
 
     textarea.form-control {
-      min-height: 140px;
+      min-height: 120px;
       resize: vertical;
     }
 
@@ -1823,6 +1906,8 @@
 </head>
 <body>
   <canvas id="sakura-canvas"></canvas>
+  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+  <div class="custom-cursor-ring" id="custom-cursor-ring"></div>
   <div class="lantern-cursor" id="lantern-cursor"></div>
 
   <!-- Navigation: Corner Logo + ONLY Home, Portfolio, Contact -->
@@ -1958,115 +2043,74 @@
           <div class="eyebrow">Portfolio Spotlight</div>
           <h2 class="section-title">Featured Works & Series</h2>
           <p class="section-desc">
-            A curated glance at my top productions. To watch all 24 videos organized into individual series folders, visit the dedicated portfolio page.
+            A curated glance at my top productions. To watch all 27 videos organized into individual series folders, visit the dedicated portfolio page.
           </p>
         </div>
 
         <div class="video-grid">
 
+          <!-- 1. AI Films (Cinematic 16:9) -->
           <article class="video-card reveal">
-            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/ad.mp4', 'AD', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_UGC_AD__mp4.jpg')">
-              <img src="thumbnails/thumb_UGC_AD__mp4.jpg" alt="AD" class="video-thumb-img" loading="lazy">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/the-last-pumpkin.mp4', 'The Last Pumpkin', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_the_last_pumpkin.jpg')">
+              <img src="thumbnails/thumb_the_last_pumpkin.jpg" alt="The Last Pumpkin" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
-              <span class="video-format-badge">Vertical Reel · 9:16</span>
-              <span class="video-series-pill">Featured Highlight</span>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
             </div>
             <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
-              <h3 class="video-title">AD</h3>
-              <p class="video-desc">High-converting UGC asset crafted for viral TikTok, Instagram Reels, and digital ad campaigns.</p>
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">The Last Pumpkin</h3>
+              <p class="video-desc">Atmospheric AI fantasy short featuring rich character narrative, ambient soundscapes, and cinematic world-building.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/ad.mp4', 'AD', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_UGC_AD__mp4.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/the-last-pumpkin.mp4', 'The Last Pumpkin', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_the_last_pumpkin.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="videos/ugc/ad.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/films/the-last-pumpkin.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
 
+          <!-- 2. AI Films - The Ledger -->
           <article class="video-card reveal">
-            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/model-ad-ugc.mp4', 'Model ad ugc', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_UGC_Model_ad_ugc_mp4.jpg')">
-              <img src="thumbnails/thumb_UGC_Model_ad_ugc_mp4.jpg" alt="Model ad ugc" class="video-thumb-img" loading="lazy">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
+              <img src="thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg" alt="The Ledger" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
-              <span class="video-format-badge">Vertical Reel · 9:16</span>
-              <span class="video-series-pill">Featured Highlight</span>
+              <span class="video-format-badge">Cinematic · 16:9</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
             </div>
             <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
-              <h3 class="video-title">Model ad ugc</h3>
-              <p class="video-desc">High-converting UGC asset crafted for viral TikTok, Instagram Reels, and digital ad campaigns.</p>
+              <span class="video-category">AI Films & Cinema</span>
+              <h3 class="video-title">The Ledger</h3>
+              <p class="video-desc">Deep narrative investigative documentary created using AI scripting, stylized visuals, and dramatic audio production.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/model-ad-ugc.mp4', 'Model ad ugc', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_UGC_Model_ad_ugc_mp4.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/the-ledger.mp4', 'The Ledger', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_The_Ledger__mp4.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="videos/ugc/model-ad-ugc.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/films/the-ledger.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
 
+          <!-- 3. AI Films - Generated From Scratch -->
           <article class="video-card reveal">
-            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/naruto/naruto-the-silent-cheater.mp4', 'NARUTO THE SILENT CHEATER', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg')">
-              <img src="thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg" alt="NARUTO THE SILENT CHEATER" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Vertical Reel · 9:16</span>
-              <span class="video-series-pill">Featured Highlight</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
-              <h3 class="video-title">NARUTO THE SILENT CHEATER</h3>
-              <p class="video-desc">Action-packed AI anime narrative series featuring fight choreography and character consistency.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/naruto/naruto-the-silent-cheater.mp4', 'NARUTO THE SILENT CHEATER', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/naruto/naruto-the-silent-cheater.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/naruto/naruto-2.mp4', 'Naruto 2', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_Naruto_2_mp4.jpg')">
-              <img src="thumbnails/thumb_Naruto%20series_Naruto_2_mp4.jpg" alt="Naruto 2" class="video-thumb-img" loading="lazy">
-              <div class="video-play-overlay">
-                <div class="play-button-orb">▶</div>
-              </div>
-              <span class="video-format-badge">Vertical Reel · 9:16</span>
-              <span class="video-series-pill">Featured Highlight</span>
-            </div>
-            <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
-              <h3 class="video-title">Naruto 2</h3>
-              <p class="video-desc">Action-packed AI anime narrative series featuring fight choreography and character consistency.</p>
-              <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/naruto/naruto-2.mp4', 'Naruto 2', 'Featured Highlight | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_Naruto_2_mp4.jpg')">
-                  <span>Watch Video</span> <span>▶</span>
-                </button>
-                <a href="videos/naruto/naruto-2.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'Featured Highlight | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
               <img src="thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg" alt="Generated from scratch" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
               <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">Featured Highlight</span>
+              <span class="video-series-pill">AI Films & Cinema</span>
             </div>
             <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
+              <span class="video-category">AI Films & Cinema</span>
               <h3 class="video-title">Generated from scratch</h3>
-              <p class="video-desc">Cinematic AI film storytelling utilizing narrative scripting, realistic voiceover, and atmospheric visual curation.</p>
+              <p class="video-desc">Cinematic generative storytelling utilizing prompt orchestration, character consistency, and atmospheric lighting.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'Featured Highlight | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/films/generated-from-scratch.mp4', 'Generated from scratch', 'AI Films & Cinema | Cinematic · 16:9', 'thumbnails/thumb_Ai%20Films_Generated_from_scratch_mp4.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
                 <a href="videos/films/generated-from-scratch.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
@@ -2074,24 +2118,117 @@
             </div>
           </article>
 
+          <!-- 4. UGC & Commercials - Stop Scrolling -->
           <article class="video-card reveal">
-            <div class="video-thumb-container " onclick="openCinemaModal('Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov', 'Cat v piderman', 'Featured Highlight | Cinematic · 16:9', 'thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg')">
-              <img src="thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg" alt="Cat v piderman" class="video-thumb-img" loading="lazy">
+            <div class="video-thumb-container" onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
+              <img src="thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg" alt="Stop scrolling" class="video-thumb-img" loading="lazy">
               <div class="video-play-overlay">
                 <div class="play-button-orb">▶</div>
               </div>
               <span class="video-format-badge">Cinematic · 16:9</span>
-              <span class="video-series-pill">Featured Highlight</span>
+              <span class="video-series-pill">UGC & Commercials</span>
             </div>
             <div class="video-info">
-              <span class="video-category">Featured Highlight</span>
-              <h3 class="video-title">Cat v piderman</h3>
-              <p class="video-desc">Viral AI fantasy short featuring dynamic physics, humor, and engaging visual hooks.</p>
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Stop scrolling</h3>
+              <p class="video-desc">High-retention commercial hook asset crafted for viral TikTok, Instagram Reels, and digital conversion ads.</p>
               <div class="video-action-row">
-                <button class="btn-watch" onclick="openCinemaModal('Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov', 'Cat v piderman', 'Featured Highlight | Cinematic · 16:9', 'thumbnails/thumb_Cats_Cat_v_piderman_mov.jpg')">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/stop-scrolling.mp4', 'Stop scrolling', 'UGC & Commercials | Cinematic · 16:9', 'thumbnails/thumb_UGC_Stop_scrolling_mp4.jpg')">
                   <span>Watch Video</span> <span>▶</span>
                 </button>
-                <a href="Achivments%20and%20creations/Cats/Cat%20v%20piderman.mov" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+                <a href="videos/ugc/stop-scrolling.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5. UGC - Lipstick Commercial -->
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/lipstick.mp4', 'Lipstick Commercial', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_lipstick.jpg')">
+              <img src="thumbnails/thumb_lipstick.jpg" alt="Lipstick Commercial" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">UGC & Commercials</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Lipstick Commercial</h3>
+              <p class="video-desc">Dynamic beauty UGC reel with persuasive pacing, clean macro aesthetics, and brand engagement prompts.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/lipstick.mp4', 'Lipstick Commercial', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_lipstick.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/ugc/lipstick.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6. UGC - Peagon Fun -->
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/ugc/peagon-fun.mp4', 'Peagon Fun', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_peagon_fun.jpg')">
+              <img src="thumbnails/thumb_peagon_fun.jpg" alt="Peagon Fun" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">UGC & Commercials</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">UGC & Commercials</span>
+              <h3 class="video-title">Peagon Fun</h3>
+              <p class="video-desc">Humorous viral social hook featuring rapid-fire visual edits and high-energy pacing for social media algorithms.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/ugc/peagon-fun.mp4', 'Peagon Fun', 'UGC & Commercials | Vertical Reel · 9:16', 'thumbnails/thumb_peagon_fun.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/ugc/peagon-fun.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 7. Naruto Anime Action -->
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/naruto/naruto-the-silent-cheater.mp4', 'NARUTO THE SILENT CHEATER', 'Naruto Anime Series | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg')">
+              <img src="thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg" alt="NARUTO THE SILENT CHEATER" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">Naruto Anime Series</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">Naruto Anime Series</span>
+              <h3 class="video-title">NARUTO THE SILENT CHEATER</h3>
+              <p class="video-desc">Action-packed AI anime combat featuring fight choreography, anime cel aesthetics, and character consistency.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/naruto/naruto-the-silent-cheater.mp4', 'NARUTO THE SILENT CHEATER', 'Naruto Anime Series | Vertical Reel · 9:16', 'thumbnails/thumb_Naruto%20series_NARUTO_THE_SILENT_CHEATER_mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/naruto/naruto-the-silent-cheater.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 8. Automotive - Video Car -->
+          <article class="video-card reveal">
+            <div class="video-thumb-container vertical-format" onclick="openCinemaModal('videos/cars/video-car.mp4', 'Video Car', 'Automotive & Cars | Vertical Reel · 9:16', 'thumbnails/thumb_Cars_Video_Car_mp4.jpg')">
+              <img src="thumbnails/thumb_Cars_Video_Car_mp4.jpg" alt="Video Car" class="video-thumb-img" loading="lazy">
+              <div class="video-play-overlay">
+                <div class="play-button-orb">▶</div>
+              </div>
+              <span class="video-format-badge">Vertical Reel · 9:16</span>
+              <span class="video-series-pill">Automotive & Cars</span>
+            </div>
+            <div class="video-info">
+              <span class="video-category">Automotive & Cars</span>
+              <h3 class="video-title">Video Car</h3>
+              <p class="video-desc">Futuristic AI automotive aesthetic showcasing aerodynamic lighting, reflections, and luxury styling.</p>
+              <div class="video-action-row">
+                <button class="btn-watch" onclick="openCinemaModal('videos/cars/video-car.mp4', 'Video Car', 'Automotive & Cars | Vertical Reel · 9:16', 'thumbnails/thumb_Cars_Video_Car_mp4.jpg')">
+                  <span>Watch Video</span> <span>▶</span>
+                </button>
+                <a href="videos/cars/video-car.mp4" target="_blank" class="btn-raw-download">Raw Video ↗</a>
               </div>
             </div>
           </article>
@@ -2399,27 +2536,72 @@
         </div>
 
         <div class="contact-grid">
-          <!-- Direct Form -->
+          <!-- Direct Enquiry Form -->
           <div class="contact-form-card reveal left">
+            <div style="margin-bottom: 22px;">
+              <span class="eyebrow" style="font-size: 0.72rem; padding: 4px 14px; margin-bottom: 8px;">Step 1 · Project Brief</span>
+              <h3 style="font-family: var(--font-display); font-size: 1.45rem; color: #fff; margin-top: 6px;">Request a Custom Video Proposal</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+                Fill out the quick enquiry below to get tailored video concepts, pricing, and turnaround timeframe.
+              </p>
+            </div>
+
             <form id="contact-form">
-              <div class="form-group">
-                <label for="form-name">Your Name</label>
-                <input type="text" id="form-name" class="form-control" placeholder="John Doe" required>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="form-name">Name & Business / Brand *</label>
+                  <input type="text" id="form-name" class="form-control" placeholder="e.g. John Doe · Apex Media" required>
+                </div>
+                <div class="form-group">
+                  <label for="form-email">Email or Preferred Contact *</label>
+                  <input type="text" id="form-email" class="form-control" placeholder="e.g. john@brand.com or @telegram" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="form-video-type">Type of Video Required *</label>
+                  <select id="form-video-type" class="form-control" required>
+                    <option value="UGC & Paid Ads (Reels / TikTok)">UGC & Paid Ads (Reels / TikTok)</option>
+                    <option value="AI Film & Documentary Storytelling">AI Film & Documentary Storytelling</option>
+                    <option value="Anime / Action Series Creation">Anime / Action Series Creation</option>
+                    <option value="Automotive & Luxury 3D / AI Visuals">Automotive & Luxury 3D / AI Visuals</option>
+                    <option value="Full Social Media Content Retainer">Full Social Media Content Retainer</option>
+                    <option value="Custom Prompt Engineering Consultation">Custom Prompt Engineering Consultation</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="form-frequency">Number of Videos / Expected Frequency *</label>
+                  <select id="form-frequency" class="form-control" required>
+                    <option value="Single Video (1 Test Project)">Single Video (1 Test Project)</option>
+                    <option value="Batch of 3-5 Videos">Batch of 3-5 Videos</option>
+                    <option value="Batch of 10-15 Videos (Monthly Retainer)">Batch of 10-15 Videos (Monthly Retainer)</option>
+                    <option value="Daily Content Pipeline (20+ Videos / Month)">Daily Content Pipeline (20+ Videos / Month)</option>
+                    <option value="Ongoing Long-Term Collaboration">Ongoing Long-Term Collaboration</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="form-budget">Budget Range *</label>
+                  <select id="form-budget" class="form-control" required>
+                    <option value="$300 – $700 (Starter / Single Reel)">$300 – $700 (Starter / Single Reel)</option>
+                    <option value="$700 – $1,500 (Multi-Video Ad Campaign)">$700 – $1,500 (Multi-Video Ad Campaign)</option>
+                    <option value="$1,500 – $3,500 (Full Series / Automation Channel)">$1,500 – $3,500 (Full Series / Automation Channel)</option>
+                    <option value="$3,500+ (Enterprise / High Volume Retainer)">$3,500+ (Enterprise / High Volume Retainer)</option>
+                    <option value="Flexible / Let's Discuss Options">Flexible / Let's Discuss Options</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="form-deadline">Target Deadline *</label>
+                  <input type="text" id="form-deadline" class="form-control" placeholder="e.g. Within 48 hours / 1-2 weeks" required>
+                </div>
               </div>
 
               <div class="form-group">
-                <label for="form-email">Your Email Address</label>
-                <input type="email" id="form-email" class="form-control" placeholder="john@example.com" required>
-              </div>
-
-              <div class="form-group">
-                <label for="form-subject">Subject</label>
-                <input type="text" id="form-subject" class="form-control" placeholder="UGC / AI Video Collaboration" required>
-              </div>
-
-              <div class="form-group">
-                <label for="form-message">Message</label>
-                <textarea id="form-message" class="form-control" placeholder="Tell me about your project, brand, or desired content system..." required></textarea>
+                <label for="form-message">Project Notes / Specific Reference Links (Optional)</label>
+                <textarea id="form-message" class="form-control" placeholder="Briefly describe your vision, references, or target audience..."></textarea>
               </div>
 
               <div class="form-btn-row">
@@ -2546,20 +2728,32 @@
     function getFormData() {
       const name = document.getElementById('form-name').value.trim();
       const email = document.getElementById('form-email').value.trim();
-      const subject = document.getElementById('form-subject').value.trim();
-      const message = document.getElementById('form-message').value.trim();
+      const videoType = document.getElementById('form-video-type').value;
+      const frequency = document.getElementById('form-frequency').value;
+      const budget = document.getElementById('form-budget').value;
+      const deadline = document.getElementById('form-deadline').value.trim();
+      const notes = document.getElementById('form-message').value.trim();
 
-      if (!name || !email || !message) {
-        alert('Please fill in your Name, Email, and Message.');
+      if (!name || !email || !deadline) {
+        alert('Please fill in your Name, Email/Contact, and Target Deadline.');
         return null;
       }
-      return { name, email, subject: subject || 'Portfolio Project Inquiry', message };
+      return { name, email, videoType, frequency, budget, deadline, notes };
     }
 
     function sendViaWhatsApp() {
       const d = getFormData();
       if (!d) return;
-      const text = `*New Inquiry for Ali Raza*\n*Name:* ${d.name}\n*Email:* ${d.email}\n*Subject:* ${d.subject}\n*Message:* ${d.message}`;
+      const text = `*New Video Production Enquiry for Ali Raza*
+----------------------------------------
+*Name & Brand:* ${d.name}
+*Contact:* ${d.email}
+*Video Type:* ${d.videoType}
+*Volume / Frequency:* ${d.frequency}
+*Budget Range:* ${d.budget}
+*Target Deadline:* ${d.deadline}
+${d.notes ? `*Project Notes:* ${d.notes}` : ''}
+----------------------------------------`;
       const url = `https://wa.me/923151728465?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank');
     }
@@ -2567,9 +2761,77 @@
     function sendViaEmail() {
       const d = getFormData();
       if (!d) return;
-      const body = `Hi Ali,\n\nName: ${d.name}\nEmail: ${d.email}\n\nMessage:\n${d.message}`;
-      const url = `mailto:arazacreations@gmail.com?subject=${encodeURIComponent(d.subject)}&body=${encodeURIComponent(body)}`;
+      const subject = `[Project Enquiry] ${d.videoType} — ${d.name}`;
+      const body = `Hi Ali,
+
+I would like to hire you / discuss a video production project with the following requirements:
+
+• Name & Brand: ${d.name}
+• Preferred Contact: ${d.email}
+• Video Type Required: ${d.videoType}
+• Volume / Frequency: ${d.frequency}
+• Budget Range: ${d.budget}
+• Target Deadline: ${d.deadline}
+
+Project Notes & References:
+${d.notes || 'None specified.'}
+
+Looking forward to your response!`;
+
+      const url = `mailto:arazacreations@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       window.location.href = url;
+    }
+
+    /* Custom Dragging Cursor Movement */
+    const cursorDot = document.getElementById('custom-cursor-dot');
+    const cursorRing = document.getElementById('custom-cursor-ring');
+    const lanternFollower = document.getElementById('lantern-cursor');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+    let isFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+    if (isFinePointer && cursorDot && cursorRing) {
+      cursorDot.style.opacity = '1';
+      cursorRing.style.opacity = '1';
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+        if (lanternFollower) {
+          lanternFollower.style.left = mouseX + 'px';
+          lanternFollower.style.top = mouseY + 'px';
+        }
+      });
+
+      // Smooth trailing physics for dragging ring
+      function animateCursor() {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top = ringY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      requestAnimationFrame(animateCursor);
+
+      // Interactive hover states for clickable elements
+      const interactiveSelector = 'a, button, input, select, textarea, .video-thumb-container, [onclick]';
+      document.querySelectorAll(interactiveSelector).forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          cursorRing.classList.add('active-hover');
+          cursorDot.classList.add('active-hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          cursorRing.classList.remove('active-hover');
+          cursorDot.classList.remove('active-hover');
+        });
+      });
+
+      window.addEventListener('mousedown', () => cursorRing.classList.add('active-click'));
+      window.addEventListener('mouseup', () => cursorRing.classList.remove('active-click'));
     }
 
     /* Sakura canvas */
@@ -2591,11 +2853,6 @@
     window.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      const cursor = document.getElementById('lantern-cursor');
-      if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      }
     });
 
     class SakuraPetal {
