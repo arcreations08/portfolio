@@ -1951,7 +1951,7 @@
       <div class="hero-bg-gradient"></div>
 
       <div class="container hero-grid">
-        <div class="hero-content reveal left">
+        <div class="hero-content">
           <div class="hero-pill-badge">
             <span class="lantern-dot"></span>
             <span>✦ AI Content Creator · UGC · Prompt Engineer</span>
@@ -2018,7 +2018,7 @@
           </div>
         </div>
 
-        <div class="hero-portrait-wrapper reveal right">
+        <div class="hero-portrait-wrapper">
           <div class="shrine-outer-ring"></div>
           <div class="shrine-inner-glow"></div>
           
@@ -2786,10 +2786,10 @@ Looking forward to your response!`;
     const cursorDot = document.getElementById('custom-cursor-dot');
     const cursorRing = document.getElementById('custom-cursor-ring');
     const lanternFollower = document.getElementById('lantern-cursor');
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
+    window._mx = window.innerWidth / 2;
+    window._my = window.innerHeight / 2;
+    let ringX = window._mx;
+    let ringY = window._my;
     let isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
     if (isFinePointer && cursorDot && cursorRing) {
@@ -2797,20 +2797,20 @@ Looking forward to your response!`;
       cursorRing.style.opacity = '1';
 
       window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursorDot.style.left = mouseX + 'px';
-        cursorDot.style.top = mouseY + 'px';
+        window._mx = e.clientX;
+        window._my = e.clientY;
+        cursorDot.style.left = window._mx + 'px';
+        cursorDot.style.top = window._my + 'px';
         if (lanternFollower) {
-          lanternFollower.style.left = mouseX + 'px';
-          lanternFollower.style.top = mouseY + 'px';
+          lanternFollower.style.left = window._mx + 'px';
+          lanternFollower.style.top = window._my + 'px';
         }
       });
 
       // Smooth trailing physics for dragging ring
       function animateCursor() {
-        ringX += (mouseX - ringX) * 0.18;
-        ringY += (mouseY - ringY) * 0.18;
+        ringX += (window._mx - ringX) * 0.18;
+        ringY += (window._my - ringY) * 0.18;
         cursorRing.style.left = ringX + 'px';
         cursorRing.style.top = ringY + 'px';
         requestAnimationFrame(animateCursor);
@@ -2847,13 +2847,7 @@ Looking forward to your response!`;
 
     const petalCount = 38;
     const petals = [];
-    let mouseX = width / 2;
-    let mouseY = height / 2;
-
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
+    // Use window._mx/_my shared with cursor tracker (no duplicate let declarations)
 
     class SakuraPetal {
       constructor() {
@@ -2878,8 +2872,8 @@ Looking forward to your response!`;
         this.angle += this.angularSpeed;
         this.flip += this.flipSpeed;
 
-        const dx = this.x - mouseX;
-        const dy = this.y - mouseY;
+        const dx = this.x - (window._mx || width / 2);
+        const dy = this.y - (window._my || height / 2);
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 140) {
           this.x += (dx / dist) * 1.5;
@@ -3008,7 +3002,7 @@ Looking forward to your response!`;
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
